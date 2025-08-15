@@ -9,21 +9,22 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/events/endpoint_changed.h>
 #include <zmk/events/layer_state_changed.h>
 #include <zmk/events/usb_conn_state_changed.h>
-#include <zmk/events/wpm_state_changed.h>
+//#include <zmk/events/wpm_state_changed.h>
 #include <zmk/battery.h>
 #include <zmk/ble.h>
 #include <zmk/display.h>
 #include <zmk/endpoints.h>
 #include <zmk/keymap.h>
 #include <zmk/usb.h>
-#include <zmk/wpm.h>
+//#include <zmk/wpm.h>
 
 #include "battery.h"
 #include "layer.h"
+#include "animation.h"
 #include "output.h"
 #include "profile.h"
 #include "screen.h"
-#include "wpm.h"
+//#include "wpm.h"
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
@@ -48,7 +49,7 @@ static void draw_middle(lv_obj_t *widget, lv_color_t cbuf[], const struct status
     fill_background(canvas);
 
     // Draw widgets
-    draw_wpm_status(canvas, state);
+    //draw_wpm_status(canvas, state);
 
     // Rotate for horizontal display
     rotate_canvas(canvas, cbuf);
@@ -172,7 +173,7 @@ ZMK_SUBSCRIPTION(widget_output_status, zmk_ble_active_profile_changed);
 
 /**
  * WPM status
- **/
+
 
 static void set_wpm_status(struct zmk_widget_screen *widget, struct wpm_status_state state) {
     for (int i = 0; i < 9; i++) {
@@ -195,6 +196,7 @@ struct wpm_status_state wpm_status_get_state(const zmk_event_t *eh) {
 ZMK_DISPLAY_WIDGET_LISTENER(widget_wpm_status, struct wpm_status_state, wpm_status_update_cb,
                             wpm_status_get_state)
 ZMK_SUBSCRIPTION(widget_wpm_status, zmk_wpm_state_changed);
+**/
 
 /**
  * Initialization
@@ -216,11 +218,13 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     lv_obj_align(bottom, LV_ALIGN_TOP_RIGHT, BUFFER_OFFSET_BOTTOM, 0);
     lv_canvas_set_buffer(bottom, widget->cbuf3, BUFFER_SIZE, BUFFER_SIZE, LV_IMG_CF_TRUE_COLOR);
 
+    draw_animation(widget->obj);
+
     sys_slist_append(&widgets, &widget->node);
     widget_battery_status_init();
     widget_layer_status_init();
     widget_output_status_init();
-    widget_wpm_status_init();
+    //widget_wpm_status_init();
 
     return 0;
 }
