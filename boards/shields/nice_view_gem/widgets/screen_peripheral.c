@@ -40,7 +40,7 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_st
  * Battery status
  **/
 
-static void set_battery_status(struct zmk_widget_screen *widget,
+static void set_battery_status(struct zmk_widget_screen_peripheral *widget,
                                struct battery_status_state state) {
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
     widget->state.charging = state.usb_present;
@@ -52,7 +52,7 @@ static void set_battery_status(struct zmk_widget_screen *widget,
 }
 
 static void battery_status_update_cb(struct battery_status_state state) {
-    struct zmk_widget_screen *widget;
+    struct zmk_widget_screen_peripheral *widget;
     SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_battery_status(widget, state); }
 }
 
@@ -83,7 +83,7 @@ static struct peripheral_status_state get_state(const zmk_event_t *_eh) {
     return (struct peripheral_status_state){.connected = zmk_split_bt_peripheral_is_connected()};
 }
 
-static void set_connection_status(struct zmk_widget_screen *widget,
+static void set_connection_status(struct zmk_widget_screen_peripheral *widget,
                                   struct peripheral_status_state state) {
     widget->state.connected = state.connected;
 
@@ -91,7 +91,7 @@ static void set_connection_status(struct zmk_widget_screen *widget,
 }
 
 static void output_status_update_cb(struct peripheral_status_state state) {
-    struct zmk_widget_screen *widget;
+    struct zmk_widget_screen_peripheral *widget;
     SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_connection_status(widget, state); }
 }
 
@@ -103,7 +103,7 @@ ZMK_SUBSCRIPTION(widget_peripheral_status, zmk_split_peripheral_status_changed);
  * Initialization
  **/
 
-int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
+int zmk_widget_screen_peripheral_init(struct zmk_widget_screen_peripheral *widget, lv_obj_t *parent) {
     widget->obj = lv_obj_create(parent);
     lv_obj_set_size(widget->obj, SCREEN_HEIGHT, SCREEN_WIDTH);
 
@@ -120,4 +120,4 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     return 0;
 }
 
-lv_obj_t *zmk_widget_screen_obj(struct zmk_widget_screen *widget) { return widget->obj; }
+lv_obj_t *zmk_widget_screen_peripheral_obj(struct zmk_widget_screen_peripheral *widget) { return widget->obj; }
