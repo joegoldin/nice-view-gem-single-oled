@@ -21,15 +21,15 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: m165437 #new entry
-      url-base: https://github.com/M165437 #new entry
+    - name: dr3wballard #new entry
+      url-base: https://github.com/dr3wballard #new entry
   projects:
     - name: zmk
       remote: zmkfirmware
       revision: main
       import: app/west.yml
-    - name: nice-view-gem #new entry
-      remote: m165437 #new entry
+    - name: nice-view-gem-single-oled #new entry
+      remote: dr3wballard #new entry
       revision: main #new entry
   self:
     path: config
